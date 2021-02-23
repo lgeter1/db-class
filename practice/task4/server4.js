@@ -89,7 +89,7 @@ app.post("/addAttraction", async (req, res) => {
 app.get("/listAll", async (req, res) => {
     try {
         // TO DO: write the query below
-        const query = "SELECT names  FROM campgrounds;
+        const query = "SELECT name FROM campgrounds";
         const dbresponse = await pool.query(query);
         const results = dbresponse.rows.map((row) => {return row.name});
         res.json({campgrounds: results})
@@ -118,21 +118,24 @@ app.get('/search', async (req, res) => {
    
     // TODO
     try {
- const check =       
+ const check = "SELECT name, location, maxLength FROM campgrounds WHERE name like  '%"+searchTerm+"%'";      
 const response = await pool.query(check);
 	    
-   const results = response.rows.map((row)) => {
+   const results = response.rows.map((row) => {console.log(row); return (row)});
+let answer = [];
+for(const a of results){
 
-return {name: row.name, location: row.location, maxLength: row.maxLength}});
-res.json({campgrounds: response.rows});
-   }
-        
+	if(a.name == searchTerm){
+
+	}
+}
+    res.json({campgrounds: answer}); 
     } catch (err){
         console.log(err);
     }
 
 
-})
+});
 
 /* Fit get request. One parameter called length which is the length of the RV.
    the request returns the campgrounds that can fit that length RV. 
@@ -184,7 +187,27 @@ res.json({campgrounds: response.rows});
 
 */
 
-// TO DO
+app.get('/fit', async (req, res) => {
+	    let campLength = req.query.maxLength;
+
+	    
+	     try {
+	    const check = "SELECT name, location, maxLength FROM campgrounds";
+	     const response = await pool.query(check);
+		     const results = response.rows.map((row) => { return (row)}); 
+	            let answer =[];
+for(const a of results){
+
+if(campLength <= a.maxLength){
+answer.push({campground: a.name, location: a.location, maxLength: a.maxLength});
+}
+}
+res.json({campgrounds: answer});
+	
+	                } catch (err){
+	                        console.log(err);
+	                            }
+	                            })
 
 
 
@@ -223,14 +246,23 @@ res.json({campgrounds: response.rows});
 
 app.get('/elevation', async (req, res) => {
     let query = '';
-    if (req.query.direction == 'lower'){
-        query = "TO DO";
+let direction = req.query.direction;
+let result = [];
+	let altitude = req.query.altitude;
+    if (direction == 'lower'){
+        query = "SELECT name, elevation, location FROM campgrounds WHERE elevation  < 8000";
     } else {
-        query =  "TO DO";
+        query =  "SELECT name, elevation, location FROM campgrounds where elevation > 8000";
     }
     try {
         // TO DO
+const check = await pool.query(query);
+const results = check.rows.map((row) => {return (row)});
+for(const re of results){
+result.push({campground: re.name, elevation: re.elevation, town: re.location})
 
+}
+res.json({campgrounds: result});
 
     } catch (err){
          console.log(err);
@@ -255,6 +287,34 @@ app.get('/elevation', async (req, res) => {
 */
 
 // TO DO
+app.post('/addCampground', async (req,res) =>{
+try{
+const name = req.body.name;
+const location = req.body.location;
+const maxlength = req.body.maxlength;
+const elevation = req.body.elevation;
+const sites = req.body.sites;
+const pad= req.body.padtype;
+
+const query = "SELECT * FROM campgrounds WHERE name = $1 AND location = $2";
+const check = await pool.query(query, [name,location]);
+if(check.rowCount !=0){
+res.json({status: "campground already in database"});
+}
+else{
+const template = "INSERT INTO campgrounds (name, location, maxlength, elevation, sites, padtype) Values ($1,$2,$3,$4,$5,$6)";
+	const response = await pool.query(template, [name,location,maxlength,elevation,sites,pad]);
+	res.json({status: "added"});
+}
+}
+catch(err)
+{
+	console.log(err);
+}
+});
+
+
+
 
 
 
