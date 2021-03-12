@@ -1,0 +1,12 @@
+{
+  "query1": "SELECT movie.title AS film, actor.name AS actor FROM actor JOIN casting ON actor.id = casting.actorid JOIN movie ON casting.movieid = movie.id WHERE actor.name = 'Nicolas Cage' ORDER BY movie.title",
+  "query2": "SELECT movie.title AS film, movie.score AS rating FROM movie JOIN casting ON movie.id = casting.movieid JOIN actor ON casting.actorid = actor.id WHERE actor.name = 'Sandra Bullock' ORDER BY movie.score DESC LIMIT 1",
+  "query3": "SELECT actor.name AS actor FROM actor JOIN casting ON actor.id = casting.actorid JOIN movie ON casting.movieid = movie.id WHERE movie.title = 'Blade Runner' ORDER BY actor.name ASC",
+  "query4": "SELECT actor.name AS director, movie.title AS film FROM actor JOIN casting ON casting.actorid = actor.id JOIN movie ON movie.id = casting.movieid WHERE movie.director = actor.id ORDER BY actor.name, movie.title",
+  "query5": "SELECT actor.name AS actor, COUNT(movie) AS films FROM movie JOIN casting ON movie.id = casting.movieid JOIN actor ON casting.actorid = actor.id GROUP BY actor.name HAVING COUNT(movie) >= 10 ORDER BY COUNT(movie) DESC, actor.name ASC",
+  "query6": "SELECT DISTINCT actor.name AS actors FROM movie JOIN casting ON movie.id = casting.movieid JOIN actor ON casting.actorid = actor.id WHERE movie.title IN(SELECT movie.title FROM movie JOIN casting ON movie.id = casting.movieid JOIN actor ON casting.actorid = actor.id WHERE actor.name = 'Michelle Pfeiffer') AND actor.name != 'Michelle Pfeiffer' ORDER BY actor.name ",
+  "query7": "SELECT artist.name AS artist, COUNT(album) AS albums FROM album JOIN artist ON album.artistid = artist.artistid GROUP BY artist.name ORDER BY COUNT(album) DESC LIMIT 5",
+  "query8": "SELECT album.title AS album FROM album JOIN artist ON album.artistid = artist.artistid WHERE artist.name = 'Santana' ORDER BY album.title",
+  "query9": "  SELECT employees.lastname AS employee_lastname, employees.firstname AS employee_firstname, manager.lastname AS manager_lastname, manager.firstname AS manager_firstname FROM employee employees JOIN(select * FROM employee) manager ON employees.reportsto = manager.employeeid ORDER BY employees.lastname, employees.firstname",
+  "query10": "SELECT artist.name AS artist, COUNT(track) AS tracks_sold FROM artist JOIN album ON artist.artistid = album.artistid JOIN track ON album.albumid = track.albumid JOIN invoiceline ON track.trackid = invoiceline.trackid GROUP BY artist.name ORDER BY COUNT(track) DESC LIMIT 1"
+}

@@ -1,0 +1,12 @@
+{
+  "query1": "SELECT movie.title, actor.name FROM movie JOIN actor ON actor.id = movie.id WHERE actor.name = 'Nicolas Cage' ORDER BY movie.title",
+  "query2": "SELECT * FROM movie",
+  "query3": "SELECT * FROM movie",
+  "query4": "SELECT * FROM movie",
+  "query5": "SELECT * FROM movie",
+  "query6": "SELECT * FROM movie",
+  "query7": "SELECT * FROM movie",
+  "query8": "SELECT * FROM movie",
+  "query9": "SELECT * FROM movie",
+  "query10": "SELECT * FROM movie"
+}
