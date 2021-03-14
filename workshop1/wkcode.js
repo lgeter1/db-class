@@ -40,7 +40,7 @@ app.get("/api", async (req, res) => {
         }else
         	check = "SELECT distinct attendees FROM workshop WHERE workshops = $1";
 
-          const response = await pool.query(check, [req.query.workshop]);
+          const response = await pool.query(check);
 
         if(response.rowCount == 0) {
         	res.json({error: "workshop not found"});
