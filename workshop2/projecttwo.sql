@@ -13,7 +13,7 @@ email TEXT
 
 CREATE TABLE workshop
 (
-attendeeid INTEGER NOT NULL PRIMARY KEY,	
+attendeeid SERIAL PRIMARY KEY,	
 title TEXT,
 date DATE,
 location TEXT,
@@ -35,13 +35,6 @@ INSERT INTO userform (username, firstname, lastname, email) VALUES
 
 
 INSERT INTO workshop(title, date, location, maxseats, instructor) VALUES
-('React Fundamentals','2020-04-20', 'Courtland', 30, 'Lewis Geter'),
 ('Tensorflow', '2018-05-06', 'Martha''s Vineyard', 40, 'Fiona Helbron'),
 ('DevOps', '2003-10-06', 'Bob''s Vineyard', 35, 'Wadi Rob');
-
-INSERT INTO attendees(username,workshopid) VALUES
-('ann', 18),
-('clara', 18 ),
-('phillips', 18),
-('phillips', 19),
-('phillips', 20);
+	
