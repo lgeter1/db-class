@@ -1,0 +1,20 @@
+{
+  "name": "workshop2",
+  "version": "1.0.0",
+  "description": "workshop2 project",
+  "main": "shop2.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dateformat": "^4.5.1",
+    "express": "^4.17.1",
+    "pg": "^8.5.1"
+  }
+}
