@@ -179,7 +179,7 @@ catch(err)
 	console.log(err);
 }
 });
-
+/**
 app.get("/attendees", async(req,res) => {
 const title = req.query.title;
 	const date = req.query.date;
@@ -203,5 +203,30 @@ const title = req.query.title;
 	{
 		console.log(err);
 	}
+});
+**/
+
+app.get("/attendees", async(req,res) => {
+	const title = req.query.title;
+	        const date = req.query.date;
+	        const location = req.query.location;
+	        try{
+			                const query = "SELECT firstname, lastname FROM workshop JOIN attendees ON attendeeid = attendees.workshopid JOIN userform ON userform.username = attendees.username WHERE workshop.title =$1 AND workshop.date =$2 AND workshop.location = $3";
+			                const response = await pool.query(query, [title,date,location]);
+
+			                if(response.rowCount == 0){
+						                  res.json({"error": "workshop does not exist"});
+						                }
+			                else
+			{
+									res.json({"attendees": [response.rows]});
+									
+						                }
+
+							        }
+	        catch(err)
+	        {
+			                console.log(err);
+			        }
 });
 
