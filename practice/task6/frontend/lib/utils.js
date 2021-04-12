@@ -16,9 +16,9 @@ function handleError(error) {
 
 module.exports = {
   createAccount: function (user_info) {
-    return { todo: "TO DO" };
+    return getJson().catch(handleError);
   },
   getLogin: function (user_info) {
-    return { todo: "TO DO" };
+    return getLogin().catch(handleError);
   },
 };

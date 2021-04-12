@@ -18,7 +18,7 @@ const config = {
   password: process.env.DB_PASS,
   database: "logger",
 };
-
+/**
 app.post("/login", async (req, res) => {
   console.log("LOGIN ", req.body);
   const username = req.body.username;
@@ -50,6 +50,36 @@ app.post("/login", async (req, res) => {
   }
 });
 
+**/
+
+app.post("/login", async (req, res) => {
+	  console.log("LOGIN ", req.body);
+	  const username = req.body.username;
+	  const password = req.body.password;
+	  try {
+		      const query =
+			        "SELECT screenname, password FROM users WHERE username = $1";
+		      const result = await pool.query(query, [username]);
+		      console.log(result);
+		      if (result.rowCount == 1) {
+			      	if(await argon2.verify(result.rows[0].password, password)){
+					      console.log(result.rows[0]);
+					      console.log("Login succeeded");
+				}
+			        //    res.json({ status: "success", screenname: result.rows[0].screenname });
+			         
+		  else{
+			 res.json({ error: "Password Incorrect" });
+			  }
+		      }
+		  else {
+			  res.json({ error: "Username not found" });
+			     }
+		      
+		    } catch (err) {
+			        console.log("ERROR " + err);
+			     }
+});
 app.post("/create", async (req, res) => {
   let hash;
   const username = req.body.username;

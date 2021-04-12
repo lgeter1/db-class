@@ -131,25 +131,25 @@ try{
 				res.json({status: "workshop does not exist"});
 			}
 		else{
-				const maxseats = temp2.rows[0].maxseats;
+//				const maxseats = temp2.rows[0].maxseats;
 			
 			const workshopid = temp2.rows[0].attendeeid;
 		
 			//const workshopid = req.body.workshopid;
 				const check3 = "SELECT username, workshopid FROM attendees WHERE username = $1 AND workshopid = $2";
 				const temp3 = await pool.query(check3, [user, workshopid]);
-				console.log("checking enrolled");
+//				console.log("checking enrolled");
 			if(temp3.rowCount !=0){
 					res.json({status: "user already enrolled"});
 				}
 			else{
-					const check4 = "SELECT * FROM attendees WHERE workshopid = $1";
+				const maxseats = temp2.rows[0].maxeseats;
+					const check4 = "SELECT count(*) FROM attendees JOIN workshop on workshops.attendeeid = attendees.workshopid WHERE workshopid = $1";
 					const temp4 = await pool.query(check4, [workshopid]);
-				if(temp4.rowCount >= maxseats){
+				if(temp4.rows[0].count >= maxseats){
 						res.json({status: "no seats available"});
 					}
 				else{
-console.log(workshopid);
 					const check5 = "INSERT INTO attendees (username, workshopid) VALUES ($1, $2)";
 						const temp5 = await pool.query(check5, [user, workshopid]);
 						res.json({status: "user added"});
@@ -211,15 +211,22 @@ app.get("/attendees", async(req,res) => {
 	        const date = req.query.date;
 	        const location = req.query.location;
 	        try{
-			                const query = "SELECT firstname, lastname FROM workshop JOIN attendees ON attendeeid = attendees.workshopid JOIN userform ON userform.username = attendees.username WHERE workshop.title =$1 AND workshop.date =$2 AND workshop.location = $3";
+			               // const query = "SELECT firstname, lastname FROM workshop JOIN attendees ON attendeeid = attendees.workshopid JOIN userform ON userform.username = attendees.username WHERE workshop.title =$1 AND workshop.date =$2 AND workshop.location = $3";
+			const query = "SELECT * FROM workshop WHERE title =$1 AND date = $2 AND location = $3";
 			                const response = await pool.query(query, [title,date,location]);
 
+
 			                if(response.rowCount == 0){
-						                  res.json({"error": "workshop does not exist"});
+						                  res.json({error: "workshop does not exist"});
 						                }
 			                else
 			{
-									res.json({"attendees": [response.rows]});
+				const workshopid = response.rows[0].id;
+			//	const query2 = "SELECT * FROM userform JOIN attendees ON attendees.username = userform.username WHERE attendees.workshopid = $1";
+				 const query2 = "SELECT firstname, lastname FROM workshop JOIN attendees ON attendeeid = attendees.workshopid JOIN userform ON userform.username = attendees.username WHERE workshop.title = $1 AND workshop.date =$2 AND workshop.location = $3";
+				const response2 = await pool.query(query2, [title, date, location]);
+				const results = response2.rows.map((row) => {return {firstname: row.firstname, lastname: row.lastname}});
+									res.json({attendees: results});
 									
 						                }
 
