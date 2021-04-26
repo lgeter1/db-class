@@ -1,7 +1,7 @@
 import Layout from "../components/MyLayout.js";
 import Router from "next/router";
 import jsCookie from "js-cookie";
-import {getLogin} from '../lib/utils.js'
+import {getLogin} from '../lib/utils.js';
 
 class Login extends React.Component {
   constructor(props) {
@@ -9,10 +9,18 @@ class Login extends React.Component {
 
     this.state = { username: "", password: "" };
   }
+
+	  async handleUsername(evt) {
+		      this.setState({username: evt.target.value});
+		    }
+
+	  async handlePassword(evt) {
+		      this.setState({password: evt.target.value});
+		    }
 async handleLogin(evt){
  const loggedInUser = await getLogin({
-	 username: this.state.username;
-	 passsword: this.state.password;
+	 username: this.state.username,
+	 passsword: this.state.password
  });
 	    this.setState({loggedInUser});
 if (loggedInUser.status == "success") {
@@ -41,7 +49,7 @@ Router.replace("/secret");
           id="username"
           className="input-style"
           value={this.state.username}
-	   onChange ={this.state.bind(this)}
+	   onChange ={this.handleUsername.bind(this)}
         />
         <br /> <br />
         <label htmlFor="password" className="text-style">
@@ -52,7 +60,7 @@ Router.replace("/secret");
           id="password"
           className="input-style"
           value={this.state.password}
-	  onChange={this.state.bind(this)}
+	  onChange={this.handlePassword.bind(this)}
         />
         <br />
         <br />
